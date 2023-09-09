@@ -1,3 +1,5 @@
+const { CLIENT_RENEG_WINDOW } = require('tls');
+
 var http = require('http'), 
     fs = require('fs'), 
     port = 8080;
@@ -29,32 +31,44 @@ var requestHandler = function(request, response) {
     Helpful example: if-else structure- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else
 
     */
+
+    if (request.method === 'GET' && request.url === '/listings') {
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end(listingData);
+    } else {
+        response.writeHead(404, { "Content-Type": "text/plain" });
+        response.end('404 Not Found');
+    }
+
+
+
 };
 
-fs.readFile('listings.json', 'utf8', function(err, data) {
-  /*
-    This callback function should save the data in the listingData variable, 
-    then start the server. 
+fs.readFile('listings.json', 'utf8', function (err, data) {
 
-    HINT: Check out this resource on fs.readFile
-    //https://nodejs.org/api/fs.html#fs_fs_readfile_path_options_callback
+    // reeeee errrororrrr
+    if (err) {
+        throw err;
+    }
 
-    HINT: Read up on JSON parsing Node.js
-    http://stackoverflow.com/questions/17251553/nodejs-request-object-documentation
-   */
 
-    //Check for errors
-    /*this resource gives you an idea of the general format err objects and Throwing an existing object.
-    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw#throwing_an_existing_object
-   */
-  
+    // get data
+    listingData = data;
 
-   //Save the data in the listingData variable already defined
-  
+    // a server is created, but not started
+    var server = http.createServer(requestHandler);
 
-  //Creates the server
-  
-  //Start the server
+    // the server is now started, listening for requests on port 8080 - go to your browerd and paste in http://127.0.0.1:8080
+    server.listen(port, function () {
+        //once the server is listening, this callback function is executed
+        console.log('Server listening on: http://127.0.0.1:' + port);
+    });
+
+    // cere
+
+    //MEOWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW this is outdated javascript
+
+
 
 
 });
